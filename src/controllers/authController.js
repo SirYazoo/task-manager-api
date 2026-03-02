@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { query } = require("../config/db");
 
 const register = async (req, res) => {
@@ -42,13 +43,17 @@ const login = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
-
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+
     res.status(200).json({
       message: "Login successful",
+      token: token,
       user: {
         id: user.id,
         username: user.username,
