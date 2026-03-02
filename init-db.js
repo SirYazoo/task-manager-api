@@ -1,10 +1,11 @@
 const { query } = require('./src/config/db');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const initDatabase = async () => {
     try {
-        const sql = fs.readFileSync(path.join(__dirname, 'src/config/init.sql')).toString();
+        const sqlPath = path.join(__dirname, 'src', 'config', 'init.sql');
+        const sql = fs.readFileSync(sqlPath).toString();
         await query(sql);
         console.log("🚀 Tables created successfully!");
         process.exit(0);
