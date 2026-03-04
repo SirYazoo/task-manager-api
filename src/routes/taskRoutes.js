@@ -37,7 +37,12 @@ router
   .put(
     protect,
     [
-      body("title").optional().withMessage("Title is required").trim().escape(),
+      body("title")
+        .optional()
+        .notEmpty()
+        .withMessage("Title is required")
+        .trim()
+        .escape(),
       body("status")
         .optional()
         .isIn(["pending", "completed"])
