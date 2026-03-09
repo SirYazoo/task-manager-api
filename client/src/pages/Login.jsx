@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 
@@ -84,6 +84,18 @@ const Login = () => {
             Sign In
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-gray-400">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="text-blue-500 hover:text-blue-400 transition-colors"
+            >
+              Sign up here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
