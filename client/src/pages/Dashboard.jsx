@@ -197,7 +197,7 @@ const Dashboard = () => {
               value={newTaskDescription}
               onChange={(e) => setNewTaskDescription(e.target.value)}
               placeholder="Add details or a description (optional)"
-              className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500 resize-y min-h-[80px]"
+              className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500 resize-y min-h-20"
             />
             <button
               type="submit"
