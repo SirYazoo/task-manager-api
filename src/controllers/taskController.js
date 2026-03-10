@@ -1,8 +1,10 @@
 const { query } = require("../config/db");
 
-// @desc    Create a new task
-// @route   POST /api/tasks
-// @access  Private
+/**
+ * @desc    Create a new task linked to the authenticated user
+ * @route   POST /api/tasks
+ * @access  Private
+ */
 const createTask = async (req, res) => {
   const { title, description } = req.body;
 
@@ -21,9 +23,12 @@ const createTask = async (req, res) => {
   }
 };
 
-// @desc    Get all tasks for the logged-in user
-// @route   GET /api/tasks
-// @access  Private
+/**
+ * @desc    Get all tasks for the logged-in user
+ * @route   GET /api/tasks
+ * @access  Private
+ * @returns {Array} JSON array of task objects belonging to the user
+ */
 const getTasks = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -40,9 +45,14 @@ const getTasks = async (req, res) => {
   }
 };
 
-// @desc    Update a task
-// @route   PUT /api/tasks/:id
-// @access  Private
+/**
+ * @desc    Update a task's status (Requires ownership verification)
+ * @route   PUT /api/tasks/:id
+ * @access  Private
+ * @param   {String} req.body.status - The new status ('pending' or 'completed')
+ * @returns {Object} JSON object of the updated task
+ * @throws  {403|404} If task is not found or user does not own it
+ */
 const updateTask = async (req, res) => {
   const { id } = req.params;
   const { title, description, status } = req.body;
@@ -78,9 +88,13 @@ const updateTask = async (req, res) => {
   }
 };
 
-// @desc    Delete a task
-// @route   DELETE /api/tasks/:id
-// @access  Private
+/**
+ * @desc    Delete a task (Requires ownership verification)
+ * @route   DELETE /api/tasks/:id
+ * @access  Private
+ * @returns {Object} JSON success message
+ * @throws  {403|404} If task is not found or user does not own it
+ */
 const deleteTask = async (req, res) => {
   const { id } = req.params;
 

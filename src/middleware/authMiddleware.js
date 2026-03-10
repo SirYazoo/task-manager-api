@@ -1,6 +1,12 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+/**
+ * @desc    Gatekeeper middleware to verify JWT from authorization header
+ * @route   Middleware - Applied to protected routes
+ * @access  Private
+ * @throws  {401} If token is missing, invalid, or expired
+ */
 const protect = async (req, res, next) => {
   let token;
 

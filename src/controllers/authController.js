@@ -2,6 +2,13 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { query } = require("../config/db");
 
+/**
+ * @desc    Register a new user, hash password, and return JWT
+ * @route   POST /api/auth/register
+ * @access  Public
+ * @param   {Object} req.body - Requires username, email, and password
+ * @returns {Object} JSON object containing success message, token, and user data
+ */
 const register = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -36,6 +43,13 @@ const register = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Authenticate user, verify bcrypt hash, and return JWT
+ * @route   POST /api/auth/login
+ * @access  Public
+ * @param   {Object} req.body - Requires email and password
+ * @returns {Object} JSON object containing success message, token, and user data
+ */
 const login = async (req, res) => {
   const { email, password } = req.body;
 
