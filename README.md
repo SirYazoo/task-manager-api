@@ -109,3 +109,9 @@ npm run dev
 - `POST /api/tasks` - Create a new task
 - `PUT /api/tasks/:id` - Update a task (Ownership verified)
 - `DELETE /api/tasks/:id` - Delete a task (Ownership verified)
+
+## 🗺️ Upcoming Features (Roadmap)
+
+- **Data Pagination:** Implementing limit and offset logic to handle large database queries efficiently.
+- **Advanced Querying:** Adding backend query parameter support and frontend controls for filtering (e.g., by status) and sorting (e.g., chronologically).
+- **Account Management:** Building secure password reset flows and user account deletion endpoints.
