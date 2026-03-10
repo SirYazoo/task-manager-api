@@ -13,9 +13,17 @@ const registerValidation = [
     .isEmail()
     .withMessage("Must be a valid email address")
     .normalizeEmail(),
-  body("passowrd")
+  body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long"),
+];
+
+const loginValidation = [
+  body("email")
+    .isEmail()
+    .withMessage("Must be a valid email address")
+    .normalizeEmail(),
+  body("password").notEmpty().withMessage("Password is required"),
 ];
 
 const validate = (req, res, next) => {
@@ -27,6 +35,6 @@ const validate = (req, res, next) => {
 };
 
 router.post("/register", registerValidation, validate, register);
-router.post("/login", login);
+router.post("/login", loginValidation, validate, login);
 
 module.exports = router;

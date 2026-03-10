@@ -9,6 +9,19 @@ const {
 } = require("../controllers/taskController");
 const { protect } = require("../middleware/authMiddleware");
 
+const taskValidation = [
+  body("title")
+    .notEmpty()
+    .withMessage("Task title is required")
+    .trim()
+    .escape(),
+  body("description").optional().trim().escape(),
+  body("status")
+    .optional()
+    .isIn(["pending", "completed"])
+    .withMessage("Invalid status value"),
+];
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -17,40 +30,14 @@ const validate = (req, res, next) => {
   next();
 };
 
+router.use(protect);
 // Route: /api/tasks
-router
-  .route("/")
-  .get(protect, getTasks)
-  .post(
-    protect,
-    [
-      body("title").notEmpty().withMessage("Title is required").trim().escape(),
-      body("description").optional().trim().escape(),
-    ],
-    validate,
-    createTask,
-  );
+router.route("/").get(getTasks).post(taskValidation, validate, createTask);
 
 // Route: /api/tasks/:id
 router
   .route("/:id")
-  .put(
-    protect,
-    [
-      body("title")
-        .optional()
-        .notEmpty()
-        .withMessage("Title is required")
-        .trim()
-        .escape(),
-      body("status")
-        .optional()
-        .isIn(["pending", "completed"])
-        .withMessage("Invalid status"),
-    ],
-    validate,
-    updateTask,
-  )
-  .delete(protect, deleteTask);
+  .put(taskValidation, validate, updateTask)
+  .delete(deleteTask);
 
 module.exports = router;
