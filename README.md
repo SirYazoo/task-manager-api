@@ -109,7 +109,3 @@ npm run dev
 - `POST /api/tasks` - Create a new task
 - `PUT /api/tasks/:id` - Update a task (Ownership verified)
 - `DELETE /api/tasks/:id` - Delete a task (Ownership verified)
-
-```
-
-```
