@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskDescription, setNewTaskDescription] = useState("");
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -31,9 +32,13 @@ const Dashboard = () => {
     if (!newTaskTitle.trim()) return;
 
     try {
-      const response = await api.post("/tasks", { title: newTaskTitle });
+      const response = await api.post("/tasks", {
+        title: newTaskTitle,
+        description: newTaskDescription.trim() || null,
+      });
       setTasks([response.data, ...tasks]);
       setNewTaskTitle("");
+      setNewTaskDescription("");
     } catch (error) {
       console.error("Failed to create task:", error);
       alert("Failed to create task. Check the console.");
@@ -96,28 +101,37 @@ const Dashboard = () => {
         {tasks.map((task) => (
           <li
             key={task.id}
-            className="flex justify-between items-center bg-gray-700 rounded p-4 border border-gray-600 group"
+            className="flex justify-between items-start bg-gray-700 rounded p-4 border border-gray-600 group"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3 w-full">
               <input
                 type="checkbox"
                 checked={task.status === "completed"}
-                onChange={() => handleToggleTask(task.id, task.is_completed)}
-                className="w-5 h-5 cursor-pointer accent-blue-500"
+                onChange={() => handleToggleTask(task.id, task.status)}
+                className="w-5 h-5 mt-1 cursor-pointer accent-blue-500 shrink-0"
               />
-              <span
-                className={
-                  task.status === "completed"
-                    ? "line-through text-gray-500 transition-all"
-                    : "text-gray-100 transition-all"
-                }
-              >
-                {task.title}
-              </span>
+              <div className="flex flex-col flex-1">
+                <span
+                  className={
+                    task.status === "completed"
+                      ? "line-through text-gray-500 transition-all font-medium"
+                      : "text-gray-100 transition-all font-medium"
+                  }
+                >
+                  {task.title}
+                </span>
+                {task.description && (
+                  <p
+                    className={`text-sm mt-1 whitespace-pre-wrap ${task.status === "completed" ? "text-gray-600" : "text-gray-400"}`}
+                  >
+                    {task.description}
+                  </p>
+                )}
+              </div>
             </div>
             <button
               onClick={() => handleDeleteTask(task.id)}
-              className="text-gray-500 hover:text-red-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200"
+              className="text-gray-500 hover:text-red-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200 ml-4"
               title="Delete task"
             >
               <svg
@@ -148,7 +162,7 @@ const Dashboard = () => {
           <h1 className="text-2xl font-bold">Task Dashboard</h1>
           <div className="flex items-center gap-4">
             <span className="text-gray-300">
-              Welcome,{" "}
+              Welcome,{""}
               <span className="text-blue-400 font-semibold">
                 {user?.username || "User"}
               </span>
@@ -166,19 +180,28 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">
             Your Tasks
           </h2>
-          <form onSubmit={handleCreateTask} className="mb-6 flex gap-2">
+          <form
+            onSubmit={handleCreateTask}
+            className="mb-6 flex flex-col gap-3"
+          >
             <input
               type="text"
               value={newTaskTitle}
               onChange={(e) => setNewTaskTitle(e.target.value)}
               placeholder="What needs to be done?"
-              className="flex-1 px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
               maxLength="255"
               required
             />
+            <textarea
+              value={newTaskDescription}
+              onChange={(e) => setNewTaskDescription(e.target.value)}
+              placeholder="Add details or a description (optional)"
+              className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500 resize-y min-h-[80px]"
+            />
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-bold transition duration-200"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-bold transition duration-200 self-end"
             >
               Add Task
             </button>
