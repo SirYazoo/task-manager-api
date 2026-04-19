@@ -9,10 +9,24 @@ const {
 } = require("../controllers/taskController");
 const { protect } = require("../middleware/authMiddleware");
 
-const taskValidation = [
+const createTaskValidation = [
   body("title")
     .notEmpty()
     .withMessage("Task title is required")
+    .trim()
+    .escape(),
+  body("description").optional().trim().escape(),
+  body("status")
+    .optional()
+    .isIn(["pending", "completed"])
+    .withMessage("Invalid status value"),
+];
+
+const updateTaskValidation = [
+  body("title")
+    .optional()
+    .notEmpty()
+    .withMessage("Task title cannot be empty if provided")
     .trim()
     .escape(),
   body("description").optional().trim().escape(),
@@ -32,12 +46,15 @@ const validate = (req, res, next) => {
 
 router.use(protect);
 // Route: /api/tasks
-router.route("/").get(getTasks).post(taskValidation, validate, createTask);
+router
+  .route("/")
+  .get(getTasks)
+  .post(createTaskValidation, validate, createTask);
 
 // Route: /api/tasks/:id
 router
   .route("/:id")
-  .put(taskValidation, validate, updateTask)
+  .put(updateTaskValidation, validate, updateTask)
   .delete(deleteTask);
 
 module.exports = router;
