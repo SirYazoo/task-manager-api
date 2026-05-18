@@ -1,13 +1,21 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const app = express();
+const pool = require("./src/config/db");
 const authRoutes = require("./src/routes/authRoutes");
 const taskRoutes = require("./src/routes/taskRoutes");
+const app = express();
+app.disable("x-powered-by");
+const cosrOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://task-manager-api-frontend-steel.vercel.app",
+  ],
+  optionsSuccessStatus: 200,
+};
 
 app.use(express.json());
-app.use(cors());
-
+app.use(cors(cosrOptions));
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 

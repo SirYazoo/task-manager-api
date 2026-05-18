@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js",
+    "dev": "nodemon -L server.js",
     "init-db": "node init-db.js"
   },
   "repository": {
@@ -28,5 +28,8 @@
     "express-validator": "^7.3.1",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
